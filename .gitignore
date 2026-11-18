@@ -1,0 +1,59 @@
+# Données financières et secrets — NE JAMAIS VERSIONNER
+# =====================================================
+
+# Snapshots Qonto (données bancaires brutes)
+qonto-exports/
+!qonto-exports/README.md
+
+# Livrables fiscaux (journaux, TVA, FEC)
+exports-fiscaux/
+!exports-fiscaux/README.md
+
+# Livrables de l'expert-comptable (confidentiels)
+reference-expert-comptable/*
+!reference-expert-comptable/README.md
+
+# Pièces justificatives et archives
+justificatifs/
+archives/
+*.pdf
+*.PDF
+
+# Travail temporaire
+_travail/
+_*.txt
+_*.log
+
+# Environnement Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.python-version
+
+# Secrets et configuration locale
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+
+# Outils
+.uv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Éditeurs / OS
+.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Sauvegardes et temporaires
+*.bak
+*.tmp
+*~
+*.meta.json

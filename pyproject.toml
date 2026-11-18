@@ -1,0 +1,59 @@
+[project]
+name = "expert-comptable-sasu"
+version = "1.0.0"
+description = "Harnais comptable et fiscal pour SASU LR Data (PCG 2025/2026, FEC, TVA, Qonto MCP)"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "Proprietary" }
+authors = [{ name = "Roland Louis Marc" }]
+
+# Dépendances optionnelles : les 4 scripts fonctionnent en stdlib pure.
+# pandas n'est utilisé que pour les analyses étendues.
+dependencies = []
+
+[project.optional-dependencies]
+analyse = ["pandas>=2.2", "openpyxl>=3.1"]
+
+# Outillage workflow git (uv sync) — cf. .clinerules/07-workflow-git.md
+[dependency-groups]
+dev = [
+  "pre-commit>=3.7",
+  "commitizen>=3.29",
+  "pytest>=8.0",
+  "ruff>=0.6",
+]
+
+[project.scripts]
+equilibre = "scripts.verifier_equilibre:main"
+fec = "scripts.generer_fec:main"
+tva = "scripts.calculer_tva:main"
+comparer = "scripts.comparer_avec_ec:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+# ---------------------------------------------------------------------
+# Conventional Commits — validation des messages (pre-commit `commit-msg`)
+# Scope volontairement libre : la liste usuelle est documentée dans
+# .clinerules/07-workflow-git.md et .gitmessage, sans blocage.
+# ---------------------------------------------------------------------
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "v$version"
+version = "1.0.0"
+version_files = ["pyproject.toml:version"]
+update_changelog_on_bump = true
+major_version_zero = false
+# Le message est en français : on accepte une ligne de titre longue à 72 car
+# (commitizen contrôle `length_limit` sur la première ligne).
+length_limit_subject_min = 10
+length_limit_subject_max = 72
