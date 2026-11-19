@@ -41,6 +41,21 @@
 | **Honoraires expert-comptable** | C | `622600 — Honoraires` | `401000` | 20 % | AC | ⚠️ À VALIDER |
 | **Formation (achat pour LR Data)** | C | `632400` (ou `631800`) | `401000` | selon nature | AC | ⚠️ À VALIDER |
 
+### 2.1 Contreparties RÉELLES identifiées (snapshot `transactions_2026-06.json`)
+
+| Contrepartie Qonto | Sens | Compte PCG | Complément | TVA | Journal | Statut |
+|---|---|---|---|---|---|---|
+| **Qonto** (avoir frais, `qonto-credit-note`) | D | `627800 — Services bancaires et assimilés` | `401000` | 20 % (récup.) | AC | ⚠️ À VALIDER |
+| **Vincennes M&B Notaires** (`A LR DATA REST DEPOT DE K…`) | D | **`456100 — Associés, apports`** | `512000` | **aucune** | BQ | ✅ **D-12** |
+| **Infomaniak** (`infomaniak.com`, hébergement) | C | `611000 — Services extérieurs` | `401000` | 20 % — **justif. manquant (A2)** | AC | ⚠️ À VALIDER |
+| **LDLC** (`LDLC.COM`, matériel 429,75 € TTC) | C | `606300 — Fournitures informatiques` (HT ≈ 358,13 € ≤ 500) | `401000` | 20 % — **justif. manquant (A2)** | AC | ⚠️ À VALIDER |
+| **Amazon** (`AMZN Mktp FR`) | C | `606300` (à préciser) | `401000` | **à vérifier (A5, vendeur tiers UE ?)** | AC | 🔴 INCONNU |
+
+> ⚠️ **Aucun de ces achats n'a de justificatif attaché** (4/5 transactions, alerte A2) :
+> la TVA est **non déductible par défaut** tant que les factures ne sont pas fournies.
+> Les montants HT ne sont donc **pas confirmés** (seul le TTC est certain).
+
+
 ## 3. Ventes
 
 | Contrepartie Qonto | Sens | Compte PCG | Complément | TVA | Journal | Statut |
@@ -92,3 +107,4 @@ Pour chaque ligne du mapping :
 | Date | Modification | Source |
 |---|---|---|
 | 2026-11-17 | Création du mapping initial (toutes lignes « À VALIDER ») | Réponses utilisateur + PCG |
+| 2026-11-19 | Ajout §2.1 : 5 contreparties **réelles** du snapshot 2026-06 (Qonto, notaires, Infomaniak, LDLC, Amazon) | `qonto-exports/transactions_2026-06.json` |

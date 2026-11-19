@@ -29,6 +29,15 @@
 | Montant libéré | — (hypothèse : 0 € appelé) | ⚠️ **À CONFIRMER** |
 | Compte à utiliser si non libéré | `101300` (appelé versé) + `109000` (non appelé) | — |
 
+> 🔎 **Élément de preuve (2026-11-19)** : le snapshot `transactions_2026-06.json` contient
+> un virement de **1 000,00 €** reçu le **10/06/2026** du notaire (*Vincennes M&B
+> Notaires*), libellé `A LR DATA REST DEPOT DE K…` = « reste dépôt de capital ».
+> ⚠️ Ce flux **ne prouve PAS** une libération intégrale : le mot « **RESTE** » implique un
+> versement **antérieur** (probablement chez le notaire, hors périmètre). Traitement
+> comptable : apport en capital `456100` (cf. **D-12**). L'hypothèse « non libéré »
+> (**D-05**) et l'IS à 25 % **restent en vigueur** jusqu'à production des statuts ou de
+> l'attestation notariale (**question E2**).
+
 > ⚠️ **Le Kbis ne mentionne pas le statut de libération du capital.** À vérifier dans :
 > 1. les **statuts** (clause capital : « libéré » / « à libérer dans les 5 ans ») ;
 > 2. le **relevé bancaire de constitution** (dépôt de capital avant immatriculation) ;
