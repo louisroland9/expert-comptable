@@ -167,7 +167,7 @@ Pour chaque période :
      `scripts/creer_branche.sh` (`feat` · `fix` · `chore` · `docs`) pour les tâches
      purement documentaires ;
   2. la **mise à jour du `README.md` devient obligatoire dans le même commit** que tout
-     changement d'arborescence / de scripts / d'entry points — règle **`.clinerules/08`** ;
+     changement d'arborescence / de scripts / d'entry points — règle **`docs/procedures/08-documentation.md`** ;
   3. application outillée **B3** : hook pre-commit `readme-a-jour` **avertisseur
      non bloquant** (contournable par `SKIP=readme-a-jour`) ;
   4. le projet est **packagé** (`[build-system]` hatchling + `[tool.uv] package = true`)
@@ -242,6 +242,34 @@ Pour chaque période :
   preuve d'une libération intégrale n'est pas produite (statuts / attestation notaire).
 - **À revoir** : oui — **question E2**, à confirmer avec l'EC.
 
+### D-13 — Allègement du contexte de démarrage : socle actif + procédures à la demande
+- **Date** : 2026-11-19
+- **Décision** : le harnais est scindé en deux niveaux.
+  1. **Socle actif** — `.clinerules/00-socle.md`, **seul fichier chargé à chaque tâche** :
+     rôle, interdits (I1→I9), arrêts, **routeur de lecture**, périmètre, protocole de
+     calcul, format de restitution.
+  2. **Procédures détaillées** — `docs/procedures/01` → `08` (déplacées depuis
+     `.clinerules/`), lues **à la demande** selon le **routeur** du socle (§ 4).
+  La lecture systématique des **7 fichiers de `memory-bank/`** est supprimée : seuls les
+  fichiers de la ligne de routeur applicable sont chargés.
+- **Justification** : audit du 2026-11-19 — **84 766 octets / 13 107 mots** de règles et de
+  mémoire étaient injectés ou lus avant toute tâche (règles + `memory-bank/`), y compris
+  pour une tâche d'outillage qui n'utilise aucune donnée comptable. La connaissance n'est
+  **pas** perdue : les fichiers sont déplacés, aucun contenu n'est supprimé.
+- **Alternative écartée** : (a) raccourcir les règles sans routeur — on perdrait la
+  traçabilité des lectures requises par type de tâche ; (b) supprimer des sections — la
+  règle 05 interdit l'effacement d'information (piste d'audit) ; (c) changer de modèle
+  avant de réduire le contexte — le prix au token ne corrige pas un chargement inutile.
+- **Point non tranché** : la divergence de périmètre **08/06 vs 09/06/2026** (D-11) est
+  désormais **signalée** dans le socle § 5 et dans `docs/procedures/01-persona-sasu.md`
+  (R4) au lieu d'être résolue arbitrairement.
+- **Mesure après (2026-11-19)** : socle **788 mots** ; tâche d'outillage / documentation
+  **1 969 mots** chargés (socle + `07-workflow-git` + `08-documentation`) et **aucun**
+  fichier de `memory-bank/` ; tâche de clôture **3 160 mots** (socle + `03`, `04`,
+  `immobilisations-et-charges`), contrôles comptables conservés.
+- **À revoir** : oui — mesurer le **coût réel par tâche** (relevés OpenRouter) avant/après,
+  et vérifier qu'une tâche de clôture conserve bien ses contrôles.
+
 ## 7. Table des écarts (à remplir)
 
 | Écart | Période | Compte | Notre valeur | Valeur EC | Delta | Qualification | Action |
@@ -255,3 +283,4 @@ Pour chaque période :
 | 2026-11-17 | Création — 7 questions ouvertes, 4 décisions initiales | Réponses utilisateur + Kbis |
 | 2026-11-19 | **D-10** — documentation : préfixe `docs`, garde-fou README (B3), packaging des entry points ; défaut `amortissements.py` consigné | Validé par l'utilisateur |
 | 2026-11-19 | **D-11** (périmètre révisé 08/06→31/12, fuseau Europe/Paris) et **D-12** (dépôt 1 000 € = apport en capital `456100`) ; D-02 amendée | Snapshot `transactions_2026-06.json` |
+| 2026-11-19 | **D-13** — allègement du contexte : socle `.clinerules/00-socle.md` + routeur de lecture, procédures déplacées en `docs/procedures/`, renvois et hook `readme-a-jour` alignés | Audit consommation du 2026-11-19 |

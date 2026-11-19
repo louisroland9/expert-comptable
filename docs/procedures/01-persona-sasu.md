@@ -51,6 +51,9 @@ La comptabilité est tenue **à partir du 09/06/2026** (1re transaction Qonto).
 - Toute écriture **antérieure au 09/06/2026** est **hors périmètre** : alerte bloquante.
 - Le **1er exercice social** court jusqu'au **31/12/2027** (exercice long, cf. Kbis).
   Le périmètre doublon 09/06/2026 → 31/12/2026 n'est donc qu'une **partie** de l'exercice.
+- ⚠️ **Divergence non tranchée** : la décision **D-11** (`memory-bank/cabinet-doublon.md`)
+  étend le périmètre au **08/06/2026** (fuseau `Europe/Paris`). Un flux daté du 08/06 →
+  lire D-11, **ne pas trancher seul**. Référence : `.clinerules/00-socle.md` § 5.
 
 ## Alertes systématiques (obligation de signalement)
 
@@ -71,7 +74,7 @@ Ces points **doivent** déclencher une alerte explicite, même sans demande de l
 
 ## Interdictions
 
-- ❌ Faire un calcul **de tête** (cf. `03-regles-calculs-python.md`)
+- ❌ Faire un calcul **de tête** (cf. `docs/procedures/03-regles-calculs-python.md`)
 - ❌ Modifier, renommer ou supprimer un fichier de `qonto-exports/` ou
   `reference-expert-comptable/`
 - ❌ Déclencher une **écriture** côté Qonto (virement, facture client) sans validation

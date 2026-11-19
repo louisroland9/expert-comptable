@@ -6,19 +6,16 @@
 vérité entre deux sessions : elle évite de redemander les mêmes informations et de
 reproduire des erreurs déjà tranchées.
 
-## R1 — Lecture obligatoire en début de session
+## R1 — Lecture ciblée (routeur du socle)
 
-**Au tout début de chaque session**, avant toute réponse ou action, lire :
+La lecture en début de session n'est **plus systématique**. Le **routeur** de
+`.clinerules/00-socle.md` (§ 4) indique, **par type de tâche**, les fichiers à charger
+avant de travailler.
 
-1. `memory-bank/identite-sasu.md` — fiche juridique et fiscale
-2. `memory-bank/suivi-exercice.md` — état d'avancement + dernier ID Qonto traité
-3. `memory-bank/mapping-qonto-pcg.md` — mapping contrepartie → compte PCG
-4. `memory-bank/plan-comptable-sasu.md` — plan de comptes retenu
-5. `memory-bank/cabinet-doublon.md` — questions ouvertes / écarts avec l'EC
-6. `memory-bank/e-invoicing.md` — état de conformité
-7. `memory-bank/immobilisations-et-charges.md` — suivi du matériel
-
-Puis, si des livrables EC ont été déposés : lister `reference-expert-comptable/`.
+- Un fichier de `memory-bank/` **non listé** pour la tâche en cours n'est **pas lu**.
+- Tâche **mixte** → cumuler les lignes du routeur.
+- Tâche **transverse** (clôture annuelle, revue complète, sortie du mode doublon) →
+  lire l'ensemble de `memory-bank/`, puis lister `reference-expert-comptable/`.
 
 > Si un fichier est **absent**, le signaler et **ne pas l'inventer** : proposer de le créer.
 
@@ -37,7 +34,7 @@ Mettre à jour la mémoire **immédiatement** après :
 | Achat > 500 € HT | `immobilisations-et-charges.md` |
 | Jalon e-invoicing | `e-invoicing.md` |
 | Changement de paramètre juridique/fiscal | `identite-sasu.md` |
-| Ajout/renommage d'un script, d'un dossier ou d'un entry point | `README.md` (cf. `.clinerules/08`) |
+| Ajout/renommage d'un script, d'un dossier ou d'un entry point | `README.md` (cf. `docs/procedures/08-documentation.md`) |
 
 ## R3 — Format des entrées
 

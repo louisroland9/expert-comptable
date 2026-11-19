@@ -17,7 +17,7 @@
 #   feat      nouvelle fonctionnalité (script, capacité du harnais)
 #   fix       correction d'un calcul, d'un mapping, d'un bug
 #   chore     tâche interne sans effet fonctionnel
-#   docs      documentation (README, .clinerules, memory-bank)
+#   docs      documentation (README, .clinerules, docs/procedures, memory-bank)
 #   refactor  réécriture sans changement de comportement
 #   test      ajout ou correction de tests
 #   build     outillage de build, dépendances, packaging
@@ -31,7 +31,7 @@
 #   amortissements  amortissements.py, immobilisations
 #   mapping      mapping-qonto-pcg.md
 #   memoire      memory-bank/
-#   regles       .clinerules/
+#   regles       .clinerules/ (socle), docs/procedures/
 #   qonto        workflow MCP Qonto, snapshots
 #   outillage    git, pre-commit, commitizen, pyproject
 #

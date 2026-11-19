@@ -22,20 +22,23 @@ la **SASU LR Data** — PCG 2025/2026, TVA (CA3), IS, FEC, MCP Qonto.
 | Régime TVA | Réel normal — **CA3 mensuelle** |
 | Banque | **Qonto** (1re transaction : 09/06/2026) |
 
-> 🔴 **Règle temporelle stricte** : toute écriture **antérieure au 09/06/2026** est
+> 🔴 **Règle temporelle stricte** : toute écriture **antérieure au 08–09/06/2026** est
 > **hors périmètre** (alerte bloquante). La période 05→08/06/2026 relève de l'EC.
-> Cf. `.clinerules/01-persona-sasu.md` (R4).
+> ⚠️ Divergence **non tranchée** entre la règle d'origine (09/06/2026) et la décision
+> **D-11** (08/06/2026, fuseau `Europe/Paris`) — cf. `.clinerules/00-socle.md` § 5.
 
 ## 2. Arborescence
 
 ```
 expert-comptable/
-├── .clinerules/                  # Règles de l'agent (source de vérité des consignes)
+├── .clinerules/                  # SOCLE ACTIF — seul fichier chargé à chaque tâche
+│   └── 00-socle.md                   # Rôle, interdits, arrêts, routeur de lecture
+├── docs/procedures/              # Procédures détaillées — lues À LA DEMANDE (routeur)
 │   ├── 01-persona-sasu.md            # Rôle, alertes A1→A10, format des écritures
 │   ├── 02-workflow-mcp-qonto.md      # Serveur MCP Qonto, snapshots, outils autorisés
 │   ├── 03-regles-calculs-python.md   # Decimal, équilibre, codes de sortie, traçabilité
 │   ├── 04-cycle-fiscal-sasu.md       # TVA, IS, CFE, amortissements, clôture, e-invoicing
-│   ├── 05-protocole-memoire.md       # Lecture/écriture de memory-bank/
+│   ├── 05-protocole-memoire.md       # Écriture de memory-bank/ et fin de session
 │   ├── 06-e-invoicing.md             # Réforme facturation électronique, Factur-X
 │   ├── 07-workflow-git.md            # Branches, Conventional Commits, interdictions
 │   └── 08-documentation.md           # Mise à jour obligatoire de ce README
@@ -66,6 +69,13 @@ expert-comptable/
 └── README.md                     # Ce fichier
 ```
 
+> **Contexte chargé** : seule `.clinerules/00-socle.md` est active en permanence (788 mots).
+> Les procédures de `docs/procedures/` et les fichiers de `memory-bank/` sont ouverts **à la
+> demande**, selon le **routeur** du socle (§ 4). Mesure du 2026-11-19 : **84 766 octets /
+> 13 107 mots** étaient auparavant lus avant toute tâche ; une tâche d'outillage ou de
+> documentation charge désormais **1 969 mots** (socle + procédures Git et documentation) et
+> **aucune mémoire comptable**. Décision **D-13**, `memory-bank/cabinet-doublon.md`.
+
 ## 3. Installation
 
 Projet géré avec **`uv`** (Python ≥ 3.12 requis ; 3.12.3 en place).
@@ -77,7 +87,7 @@ git config commit.template .gitmessage          # modèle de message de commit
 ```
 
 > Le `core.hooksPath` posé par pre-commit est **local et non versionné** : un clone
-> neuf doit relancer ces commandes (cf. `.clinerules/07-workflow-git.md`, R1).
+> neuf doit relancer ces commandes (cf. `docs/procedures/07-workflow-git.md`, R1).
 
 Vérifier l'ensemble du dépôt sans committer :
 
@@ -188,7 +198,8 @@ paramètres, horodatage). Ces fichiers compagnons sont **exclus du versionnement
 ## 5. Workflow git
 
 - **Une tâche = une branche** (`feat/…`, `fix/…`, `chore/…`, `docs/…`), créée depuis
-  `main`. **Jamais de commit direct sur `main`** — cf. `.clinerules/07`, R2.1.
+  `main`. **Jamais de commit direct sur `main`** — cf. `docs/procedures/07-workflow-git.md`,
+  R2.1.
   ```bash
   bash scripts/creer_branche.sh docs readme-racine
   ```
@@ -215,7 +226,7 @@ paramètres, horodatage). Ces fichiers compagnons sont **exclus du versionnement
 ## 7. Alertes systématiques
 
 Ces points déclenchent une alerte explicite (détail et traitement dans
-`.clinerules/01-persona-sasu.md`) :
+`docs/procedures/01-persona-sasu.md`) :
 
 | # | Situation | Gravité |
 |---|---|---|
@@ -234,18 +245,20 @@ Ces points déclenchent une alerte explicite (détail et traitement dans
 
 > 📌 **Toute tâche qui modifie l'arborescence, les scripts ou les entry points met à
 > jour ce README *dans le même commit*.** Règle complète :
-> `.clinerules/08-documentation.md`.
+> `docs/procedures/08-documentation.md`.
 >
 > Un hook pre-commit **avertisseur** (`readme-a-jour`) rappelle cette obligation si un
-> commit touche `scripts/`, `.clinerules/`, `memory-bank/` ou `pyproject.toml` sans
-> toucher `README.md`. Contournement volontaire :
+> commit touche `scripts/`, `.clinerules/`, `docs/procedures/`, `memory-bank/` ou
+> `pyproject.toml` sans toucher `README.md`. Contournement volontaire :
 > `SKIP=readme-a-jour git commit …`.
 
 ## 9. Références
 
-- Règles de l'agent : `.clinerules/01` → `.clinerules/08`
+- Socle actif (seul fichier chargé à chaque tâche) : `.clinerules/00-socle.md`
+- Procédures détaillées (à la demande, via le routeur du socle) :
+  `docs/procedures/01` → `docs/procedures/08`
 - Mémoire du dossier : `memory-bank/`
 - Convention de commit : `.gitmessage`
 - Modèle de pull request : `.github/PULL_REQUEST_TEMPLATE.md`
-- Protocole mémoire (lecture obligatoire en début de session) :
-  `.clinerules/05-protocole-memoire.md`
+- Protocole mémoire (lecture ciblée et écriture) :
+  `docs/procedures/05-protocole-memoire.md`

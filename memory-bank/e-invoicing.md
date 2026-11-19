@@ -1,7 +1,7 @@
 # e-invoicing — état de conformité LR Data
 
 > Suivi de la réforme de la **facturation électronique**. Cadre détaillé dans
-> `.clinerules/06-e-invoicing.md`.
+> `docs/procedures/06-e-invoicing.md`.
 
 ## 1. Calendrier applicable à LR Data
 

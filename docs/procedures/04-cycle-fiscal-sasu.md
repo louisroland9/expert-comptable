@@ -141,7 +141,7 @@ b) Amortissement linéaire, prorata temporis (matériel info : 3 ans)
   (grandes entreprises / ETI depuis 09/2026, puis PME/TPE au **01/09/2027**).
 - **Qonto est Plateforme Agréée certifiée** → canal naturel pour LR Data.
 - Format : **Factur-X** (PDF/A-3 + XML CII, EN 16931) ; annuaire national.
-- Cf. `.clinerules/06-e-invoicing.md` et `memory-bank/e-invoicing.md`.
+- Cf. `docs/procedures/06-e-invoicing.md` et `memory-bank/e-invoicing.md`.
 
 ## 9. Réserve — non-juriste
 
