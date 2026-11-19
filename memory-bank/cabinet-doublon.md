@@ -75,9 +75,12 @@ Pour chaque période :
 
 ### D-02 — Périmètre démarrant au 09/06/2026
 - **Date** : 2026-11-17
-- **Décision** : le doublon démarre à la 1re transaction Qonto (09/06/2026).
+- **Décision initiale** : le doublon démarre à la 1re transaction Qonto (09/06/2026).
 - **Justification** : la société est immatriculée le 08/06/2026 ; rien avant.
 - **Alternative écartée** : démarrer au 05/06/2026 (date d'activité) — pas de flux.
+- **⚠️ AMENDÉE le 2026-11-19 (cf. D-11)** : le snapshot du 1er mois révèle une transaction
+  réglée le **08/06/2026 22:56 UTC** (= 09/06 00:56 heure de Paris). Le périmètre est
+  révisé à **08/06/2026 → 31/12/2026**.
 - **À revoir** : non (sauf contradiction de l'EC).
 
 ### D-03 — Règle PCG stricte sur les immobilisations
@@ -198,6 +201,47 @@ Pour chaque période :
 
 
 
+### D-11 — Périmètre révisé : 08/06/2026 → 31/12/2026
+- **Date** : 2026-11-19
+- **Décision** : le périmètre du doublon est étendu à **08/06/2026 → 31/12/2026**
+  (au lieu de 09/06 → 31/12/2026, D-02).
+- **Justification** : le snapshot `qonto-exports/transactions_2026-06.json` contient une
+  transaction Qonto (avoir de frais, `qonto-credit-note`) réglée le **08/06/2026 à
+  22:56 UTC**, soit le **09/06/2026 à 00:56 heure de Paris**. La date d'immatriculation
+  est le **08/06/2026** : rien n'existe avant. Retenir le 08/06 évite d'avoir à
+  reconstituer un à-nouveau de 5,32 € au 09/06.
+- **Fuseau** : le périmètre est apprécié en **heure de Paris** (`Europe/Paris`), décision
+  structurante consignée dans le `_meta` du snapshot. Qonto transmet des horodatages UTC.
+- **Alternative écartée** : maintenir 09/06 et créer un à-nouveau de 5,32 € (`AN`) —
+  écarté : complexité inutile pour un flux de 5,32 € qui est bien daté du 08/06 UTC.
+- **À revoir** : non, sauf si l'EC confirme une autre date de début.
+
+### D-12 — Dépôt de 1 000 € : apport en capital (`456100`), pas un produit
+- **Date** : 2026-11-19
+- **Décision** : la réception de **1 000,00 €** du **10/06/2026** (émetteur :
+  *VINCENNES M ET B NOTAIRES SAS*, libellé `A LR DATA REST DEPOT DE K…`) est
+  comptabilisée comme **apport en capital** :
+  ```
+  Journal : BQ   Date : 10/06/2026   Libellé : Dépôt de capital — notaire
+    Débit  512000 — Banque                              1 000,00
+    Crédit 456100 — Associés, apports                   1 000,00
+  Pièce justificative : relevé Qonto (à compléter par l'attestation du notaire)
+  Contrôle : Σ Débit = Σ Crédit = 1 000,00
+  ```
+- **Justification** : le libellé « REST DEPOT DE K… » = « reste dépôt de capital » ;
+  l'émetteur est le notaire chargé de la constitution. Un apport en capital **n'est
+  jamais un produit** (pas de `706xxx`) et **ne porte pas de TVA**.
+- **⚠️ Donnée Qonto erronée** : Qonto classe ce flux en `cashflow_category =
+  "Dépenses administratives" / "Frais juridiques"` avec `vat_rate: 20` et
+  `vat_amount: 166,67`. **Ces champs sont faux** et ne doivent **pas** être repris.
+  Ils sont explicitement neutralisés dans le snapshot (`_avertissement_traitement`).
+- **Impact sur la question Q1 / E2 (capital libéré ?)** : ce flux **n'est pas la preuve
+  d'une libération intégrale**. Le mot « **RESTE** » indique qu'un versement
+  **antérieur** a eu lieu (probablement chez le notaire, avant l'immatriculation, donc
+  **hors périmètre**). La décision **D-05 (IS à 25 %)** reste en vigueur tant que la
+  preuve d'une libération intégrale n'est pas produite (statuts / attestation notaire).
+- **À revoir** : oui — **question E2**, à confirmer avec l'EC.
+
 ## 7. Table des écarts (à remplir)
 
 | Écart | Période | Compte | Notre valeur | Valeur EC | Delta | Qualification | Action |
@@ -210,3 +254,4 @@ Pour chaque période :
 |---|---|---|
 | 2026-11-17 | Création — 7 questions ouvertes, 4 décisions initiales | Réponses utilisateur + Kbis |
 | 2026-11-19 | **D-10** — documentation : préfixe `docs`, garde-fou README (B3), packaging des entry points ; défaut `amortissements.py` consigné | Validé par l'utilisateur |
+| 2026-11-19 | **D-11** (périmètre révisé 08/06→31/12, fuseau Europe/Paris) et **D-12** (dépôt 1 000 € = apport en capital `456100`) ; D-02 amendée | Snapshot `transactions_2026-06.json` |

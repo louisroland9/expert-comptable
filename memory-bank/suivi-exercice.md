@@ -16,16 +16,25 @@
 
 | Snapshot | Type | Date d'extraction | Nb lignes | Dernier `transaction_id` | Statut |
 |---|---|---|---|---|---|
-| — | — | — | — | — | ⏳ en attente |
+| `transactions_2026-06.json` | transactions | 2026-11-19 | 5 | `019eda7f-ae7e-76c7-8f93-43a826e46f38` | ✅ extrait |
 
 > Nommage : `qonto-exports/{type}_{AAAA-MM}.json` (cf. `.clinerules/02`).
 > Un snapshot existant n'est **jamais écrasé**.
+
+**Organisation** : LR Data (`019e875e-6fed-76e0-a3ff-1ffbf8076678`)
+**Compte** : Compte principal (`019e890b-e29f-7ca0-a88b-493a4bdc6837`), IBAN FR76169580…
+**Solde au 30/06/2026** : **335,40 €** (vérifié par somme des flux, `.meta` du snapshot)
+**Fuseau de référence** : **Europe/Paris** — les horodatages Qonto sont en UTC ; la
+transaction du 08/06 22:56 UTC tombe le **09/06 à 00:56 heure de Paris** (donc dans le
+périmètre). Cf. `_meta.note_fuseau` du snapshot.
+**Périmètre retenu pour juin** : **08/06/2026 → 30/06/2026** (révisé le 2026-11-19,
+cf. D-02 amendée dans `cabinet-doublon.md`).
 
 ## Avancement mensuel
 
 | Mois | Snapshot | Transactions pointées | Justificatifs manquants | Réconcilié | CA3 déposée | Validé EC | Écart |
 |---|---|---|---|---|---|---|---|
-| 2026-06 (09→30) | ⏳ | — | — | — | — | — | — |
+| 2026-06 (09→30) | ✅ | 🔄 5 tx extraites | **4 / 5** (A2) | ⏳ | — | — | — |
 | 2026-07 | ⏳ | — | — | — | — | — | — |
 | 2026-08 | ⏳ | — | — | — | — | — | — |
 | 2026-09 | ⏳ | — | — | — | — | — | — |
@@ -34,6 +43,7 @@
 | 2026-12 | ⏳ | — | — | — | — | — | — |
 
 Légende : ⏳ à faire · 🔄 en cours · ✅ fait · ⚠️ anomalie
+
 
 ## Rappel des obligations périodiques
 
