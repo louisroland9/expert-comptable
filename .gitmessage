@@ -1,0 +1,63 @@
+
+# =====================================================================
+# LR Data — modèle de message de commit (Conventional Commits)
+# Activé par : git config commit.template .gitmessage
+# Validé par : uv run cz check --message-file <fichier>
+# =====================================================================
+#
+# Format :
+#
+#   <type>(<scope>): <description à l'infinitif, ≤ 72 caractères>
+#
+#   [corps optionnel : POURQUOI le changement, jamais le COMMENT]
+#
+#   [pied optionnel : référence — #12, A8 (alerte 01), Q2 (question ouverte)]
+#
+# Types autorisés :
+#   feat      nouvelle fonctionnalité (script, capacité du harnais)
+#   fix       correction d'un calcul, d'un mapping, d'un bug
+#   chore     tâche interne sans effet fonctionnel
+#   docs      documentation (README, .clinerules, memory-bank)
+#   refactor  réécriture sans changement de comportement
+#   test      ajout ou correction de tests
+#   build     outillage de build, dépendances, packaging
+#   ci        intégration continue, hooks
+#   perf      amélioration de performance
+#
+# Scopes usuels (liste documentée, non bloquante) :
+#   fec          generer_fec.py
+#   tva          calculer_tva.py, CA3
+#   equilibre    verifier_equilibre.py
+#   amortissements  amortissements.py, immobilisations
+#   mapping      mapping-qonto-pcg.md
+#   memoire      memory-bank/
+#   regles       .clinerules/
+#   qonto        workflow MCP Qonto, snapshots
+#   outillage    git, pre-commit, commitizen, pyproject
+#
+# RÈGLES D'ATOMICITÉ (obligatoires) :
+#   - UN commit = UN changement logique complet et cohérent.
+#   - Ne jamais mélanger refactor + feat dans le même commit.
+#   - Ne jamais mélanger documentation et changement de code,
+#     sauf si la doc fait partie intégrante du changement.
+#   - Le dépôt doit rester fonctionnel à chaque commit.
+#   - Découper avec `git add -p` si plusieurs changements cohabitent.
+#
+# RÈGLES DE BRANCHE :
+#   - UNE feature = UNE branche, créée depuis `main` à jour.
+#   - Préfixes : feat/<slug>, fix/<slug>, chore/<slug>.
+#   - INTERDIT de committer directement sur `main`.
+#   - L'agent ne pousse JAMAIS : le push est fait par l'utilisateur.
+#
+# EXEMPLES VALIDES :
+#   feat(tva): ajoute le calcul de la TVA déductible intracommunautaire
+#   fix(equilibre): corrige le contrôle par écriture sur les OD de régularisation
+#   chore(outillage): ajoute commitizen et les dépendances de développement
+#   docs(regles): documente le workflow git pour l'agent
+#   refactor(fec): isole la lecture des journaux dans une fonction dédiée
+#
+# EXEMPLES REFUSÉS :
+#   maj du script              (pas de type)
+#   feat: Update TVA script.   (en anglais, ponctuation finale, majuscule)
+#   fix: corrections diverses  (non atomique, description vide de sens)
+# =====================================================================

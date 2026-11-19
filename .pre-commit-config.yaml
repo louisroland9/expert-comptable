@@ -1,0 +1,135 @@
+# =====================================================================
+# Workflow git LR Data — pre-commit
+# =====================================================================
+# Tous les hooks sont en `repo: local` : aucun code tiers n'est
+# téléchargé depuis le réseau. Cohérent avec la règle 02 (sécurité :
+# aucune donnée Qonto ne sort du workspace).
+#
+# Bootstrap (une seule fois par clone) :
+#   uv sync
+#   uv run pre-commit install --install-hooks
+#
+# Le hook `core.hooksPath` posé par pre-commit est LOCAL et NON versionné :
+# un clone neuf doit relancer la commande ci-dessus.
+#
+# Vérifier l'ensemble du dépôt sans committer :
+#   uv run pre-commit run --all-files
+# =====================================================================
+
+minimum_pre_commit_version: "3.7.0"
+default_install_hook_types: [pre-commit, commit-msg]
+default_stages: [pre-commit]
+
+repos:
+  # ------------------------------------------------------------------
+  # 1. Garde-fou comptable : aucune donnée financière ne doit être
+  #    versionnée. Double sécurité avec .gitignore (règles 03 R4 / 05 R4).
+  # ------------------------------------------------------------------
+  - repo: local
+    hooks:
+      - id: interdire-donnees-financieres
+        name: "Garde-fou — aucune donnée financière versionnée"
+        entry: >-
+          bash -c '
+          fichiers="$(git diff --cached --name-only --diff-filter=ACMR)";
+          interdit="$(printf "%s\n" "$fichiers"
+          | grep -E "^(qonto-exports|reference-expert-comptable|exports-fiscaux)/"
+          | grep -vE "/README\.md$" || true)";
+          if [ -n "$interdit" ]; then
+          echo "🔴 Fichiers de données financières en zone de commit :";
+          printf "   %s\n" $interdit;
+          echo "   Ces dossiers sont immuables et non versionnés (règles R4/03, R4/05).";
+          echo "   Retire-les : git restore --staged <fichier>";
+          exit 1;
+          fi
+          '
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: interdire-pieces-jointes
+        name: "Garde-fou — aucun justificatif ni .meta.json versionné"
+        entry: >-
+          bash -c '
+          fichiers="$(git diff --cached --name-only --diff-filter=ACMR)";
+          interdit="$(printf "%s\n" "$fichiers"
+          | grep -iE "\.(pdf|meta\.json)$" || true)";
+          if [ -n "$interdit" ]; then
+          echo "🔴 Pièces justificatives / .meta.json détectés :";
+          printf "   %s\n" $interdit;
+          echo "   Les .meta.json sont des fichiers compagnons générés (règle R6/03).";
+          exit 1;
+          fi
+          '
+        language: system
+        pass_filenames: false
+        always_run: true
+
+  # ------------------------------------------------------------------
+  # 2. Conventional commits — le message est relu par commitizen.
+  #    Stage : commit-msg (seul stage où le message est disponible).
+  # ------------------------------------------------------------------
+  - repo: local
+    hooks:
+      - id: commitizen-check
+        name: "Conventional commit — format du message"
+        # commitizen >= 4 : `cz check` lit le fichier de message sur STDIN.
+        # pre-commit transmet le fichier (COMMIT_EDITMSG) en argument :
+        # on le redirige vers stdin via `cat`.
+        entry: bash -c 'uv run --no-sync cz check --allow-abort < "$1"' --
+        language: system
+        stages: [commit-msg]
+        pass_filenames: true
+
+  # ------------------------------------------------------------------
+  # 3. Qualité Python — périmètre scripts/ (stdlib pure, règle R3/03).
+  # ------------------------------------------------------------------
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: "ruff — analyse statique"
+        entry: uv run --no-sync ruff check --fix
+        language: system
+        types: [python]
+        files: ^scripts/.*\.py$
+
+      - id: ruff-format
+        name: "ruff — formatage"
+        entry: uv run --no-sync ruff format
+        language: system
+        types: [python]
+        files: ^scripts/.*\.py$
+
+  # ------------------------------------------------------------------
+  # 4. Hygiène de base (aucun téléchargement, implémenté localement).
+  # ------------------------------------------------------------------
+  - repo: local
+    hooks:
+      - id: pas-de-whitespace-en-fin-de-ligne
+        name: "Hygiène — espaces en fin de ligne"
+        entry: bash -c 'for f in "$@"; do sed -i "s/[[:space:]]*$//" "$f"; done' --
+        language: system
+        types: [text]
+
+      - id: fin-de-fichier
+        name: "Hygiène — newline final"
+        entry: bash -c 'for f in "$@"; do [ -s "$f" ] && [ "$(tail -c 1 "$f" | wc -l)" -eq 0 ] && printf "\n" >> "$f"; done; exit 0' --
+        language: system
+        types: [text]
+
+      - id: pas-de-conflit-de-merge
+        name: "Hygiène — marqueurs de conflit"
+        # Vérification déterministe en stdlib pure (règle R3/03) : un simple
+        # `grep` en entry est ambigu (fichiers non suivis, noms exotiques).
+        # `.gitmessage` documente les marqueurs en commentaire : exclu.
+        entry: python3 scripts/verifier_conflits.py
+        language: system
+        types: [text]
+        exclude: ^\.gitmessage$
+
+      - id: json-valide
+        name: "Hygiène — JSON valide"
+        entry: python3 -m json.tool
+        language: system
+        types: [json]
+        exclude: ^qonto-exports/
