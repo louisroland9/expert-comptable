@@ -87,7 +87,9 @@ def libelle_compte(compte: str) -> str:
     return f"Compte {compte}" if compte else "Compte inconnu"
 
 
-def agreger(journaux, debut: str | None, fin: str | None, comptes_exoneres: tuple[str, ...]) -> dict:
+def agreger(
+    journaux, debut: str | None, fin: str | None, comptes_exoneres: tuple[str, ...]
+) -> dict:
     """Agrège les mouvements de TVA et de chiffre d'affaires."""
     tva_collectee: dict[str, Decimal] = {}
     tva_deductible: dict[str, Decimal] = {}
@@ -128,22 +130,28 @@ def agreger(journaux, debut: str | None, fin: str | None, comptes_exoneres: tupl
                     tva_intracom_coll += credit
 
                 # Chiffre d'affaires : crédit des comptes de produits (classe 7)
-                if compte.startswith(COMPTES_VENTES) and not compte.startswith("76") \
-                        and not compte.startswith("77") and not compte.startswith("78"):
+                if (
+                    compte.startswith(COMPTES_VENTES)
+                    and not compte.startswith("76")
+                    and not compte.startswith("77")
+                    and not compte.startswith("78")
+                ):
                     montant = credit - debit
                     if montant == ZERO:
                         continue
                     ca_par_compte[compte] = ca_par_compte.get(compte, ZERO) + montant
                     if compte.startswith(tuple(comptes_exoneres)):
                         ca_exonere += montant
-                        lignes_exonerees.append({
-                            "date": date_iso,
-                            "journal": journal.code,
-                            "piece": ecriture.piece,
-                            "compte": compte,
-                            "montant": str(montant),
-                            "libelle": ecriture.libelle or ligne.libelle,
-                        })
+                        lignes_exonerees.append(
+                            {
+                                "date": date_iso,
+                                "journal": journal.code,
+                                "piece": ecriture.piece,
+                                "compte": compte,
+                                "montant": str(montant),
+                                "libelle": ecriture.libelle or ligne.libelle,
+                            }
+                        )
                     else:
                         ca_taxable += montant
 
@@ -234,17 +242,23 @@ def main(argv: list[str] | None = None) -> int:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    analyseur.add_argument("--dir", dest="racine", default=None,
-                           help="repertoire des journaux (defaut : exports-fiscaux/)")
-    analyseur.add_argument("--mois", dest="mois", default=None,
-                           help="mois au format AAAA-MM (ex. 2026-11)")
-    analyseur.add_argument("--debut", dest="debut", default=None,
-                           help="date de debut AAAA-MM-JJ")
-    analyseur.add_argument("--fin", dest="fin", default=None,
-                           help="date de fin AAAA-MM-JJ")
-    analyseur.add_argument("--comptes-exoneres", dest="exoneres", default="70670",
-                           help="prefixes de comptes exoneres, separes par des virgules "
-                                "(defaut : 70670 = formation)")
+    analyseur.add_argument(
+        "--dir",
+        dest="racine",
+        default=None,
+        help="repertoire des journaux (defaut : exports-fiscaux/)",
+    )
+    analyseur.add_argument(
+        "--mois", dest="mois", default=None, help="mois au format AAAA-MM (ex. 2026-11)"
+    )
+    analyseur.add_argument("--debut", dest="debut", default=None, help="date de debut AAAA-MM-JJ")
+    analyseur.add_argument("--fin", dest="fin", default=None, help="date de fin AAAA-MM-JJ")
+    analyseur.add_argument(
+        "--comptes-exoneres",
+        dest="exoneres",
+        default="70670",
+        help="prefixes de comptes exoneres, separes par des virgules (defaut : 70670 = formation)",
+    )
     analyseur.add_argument("--json", action="store_true", help="sortie JSON")
     analyseur.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     options = analyseur.parse_args(argv)
@@ -256,16 +270,22 @@ def main(argv: list[str] | None = None) -> int:
             return 3
         annee, mois = options.mois.split("-")
         debut = f"{annee}-{mois}-01"
-        dernier_jour = _dt.date(int(annee) + (mois == "12"), int(mois) % 12 + 1, 1) - _dt.timedelta(days=1)
+        dernier_jour = _dt.date(int(annee) + (mois == "12"), int(mois) % 12 + 1, 1) - _dt.timedelta(
+            days=1
+        )
         fin = dernier_jour.isoformat()
 
-    comptes_exoneres = tuple(
-        p.strip() for p in options.exoneres.split(",") if p.strip()
-    ) or COMPTE_VENTES_EXONEREES_DEFAUT
+    comptes_exoneres = (
+        tuple(p.strip() for p in options.exoneres.split(",") if p.strip())
+        or COMPTE_VENTES_EXONEREES_DEFAUT
+    )
 
     projet = Path(__file__).resolve().parent.parent
-    racine = Path(options.racine).expanduser().resolve() if options.racine \
+    racine = (
+        Path(options.racine).expanduser().resolve()
+        if options.racine
         else (projet / "exports-fiscaux")
+    )
 
     if not racine.exists():
         print(f"ERREUR : repertoire introuvable : {racine}", file=sys.stderr)

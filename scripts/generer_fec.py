@@ -67,7 +67,6 @@ from verifier_equilibre import (  # noqa: E402
     controler_ensemble,
     fmt,
     lister_fichiers,
-    parse_montant,
 )
 
 __version__ = "1.0.0"
@@ -87,10 +86,24 @@ LIBELLES_JOURNAUX = {
 }
 
 COLONNES = [
-    "JournalCode", "JournalLib", "EcritureNum", "EcritureDate",
-    "CompteNum", "CompteLib", "CompAuxNum", "CompAuxLib",
-    "PieceRef", "PieceDate", "EcritureLib", "Debit", "Credit",
-    "EcritureLet", "DateLet", "ValidDate", "Montantdevise", "Idevise",
+    "JournalCode",
+    "JournalLib",
+    "EcritureNum",
+    "EcritureDate",
+    "CompteNum",
+    "CompteLib",
+    "CompAuxNum",
+    "CompAuxLib",
+    "PieceRef",
+    "PieceDate",
+    "EcritureLib",
+    "Debit",
+    "Credit",
+    "EcritureLet",
+    "DateLet",
+    "ValidDate",
+    "Montantdevise",
+    "Idevise",
 ]
 
 
@@ -149,26 +162,28 @@ def construire_lignes(journaux, siren: str) -> list[list[str]]:
                 # CompAuxNum / CompAuxLib : renseignés pour les comptes de tiers
                 compte_aux = ligne.compte if ligne.compte[:1] == "4" else ""
                 libelle_aux = ligne.libelle if compte_aux else ""
-                lignes.append([
-                    journal.code,                      # JournalCode
-                    libelle_journal,                   # JournalLib
-                    str(ecriture.numero).zfill(10),    # EcritureNum
-                    date_fec,                          # EcritureDate
-                    ligne.compte,                      # CompteNum
-                    ligne.libelle,                     # CompteLib
-                    compte_aux,                        # CompAuxNum
-                    libelle_aux,                       # CompAuxLib
-                    ecriture.piece,                    # PieceRef
-                    date_fec,                          # PieceDate
-                    ecriture.libelle or ligne.libelle, # EcritureLib
-                    montant_fec(ligne.debit),          # Debit
-                    montant_fec(ligne.credit),         # Credit
-                    "",                                # EcritureLet (lettrage)
-                    "",                                # DateLet
-                    date_fec,                          # ValidDate
-                    "",                                # Montantdevise
-                    "",                                # Idevise
-                ])
+                lignes.append(
+                    [
+                        journal.code,  # JournalCode
+                        libelle_journal,  # JournalLib
+                        str(ecriture.numero).zfill(10),  # EcritureNum
+                        date_fec,  # EcritureDate
+                        ligne.compte,  # CompteNum
+                        ligne.libelle,  # CompteLib
+                        compte_aux,  # CompAuxNum
+                        libelle_aux,  # CompAuxLib
+                        ecriture.piece,  # PieceRef
+                        date_fec,  # PieceDate
+                        ecriture.libelle or ligne.libelle,  # EcritureLib
+                        montant_fec(ligne.debit),  # Debit
+                        montant_fec(ligne.credit),  # Credit
+                        "",  # EcritureLet (lettrage)
+                        "",  # DateLet
+                        date_fec,  # ValidDate
+                        "",  # Montantdevise
+                        "",  # Idevise
+                    ]
+                )
 
     return lignes
 
@@ -179,28 +194,48 @@ def main(argv: list[str] | None = None) -> int:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    analyseur.add_argument("--dir", dest="racine", default=None,
-                           help="repertoire des journaux (defaut : exports-fiscaux/)")
-    analyseur.add_argument("--sortie", dest="sortie", default=None,
-                           help="repertoire de sortie du FEC (defaut : exports-fiscaux/fec/)")
-    analyseur.add_argument("--siren", dest="siren", default="105991475",
-                           help="SIREN de l'entite (defaut : 105991475)")
-    analyseur.add_argument("--exercice", dest="exercice", default="2026",
-                           help="exercice (defaut : 2026)")
-    analyseur.add_argument("--cloture", dest="cloture", default="20271231",
-                           help="date de cloture AAAAMMJJ (defaut : 20271231)")
-    analyseur.add_argument("--sep", dest="separateur", default="|",
-                           help="separateur de colonnes (defaut : '|')")
-    analyseur.add_argument("--dry-run", action="store_true",
-                           help="controle et affiche sans ecrire le FEC")
+    analyseur.add_argument(
+        "--dir",
+        dest="racine",
+        default=None,
+        help="repertoire des journaux (defaut : exports-fiscaux/)",
+    )
+    analyseur.add_argument(
+        "--sortie",
+        dest="sortie",
+        default=None,
+        help="repertoire de sortie du FEC (defaut : exports-fiscaux/fec/)",
+    )
+    analyseur.add_argument(
+        "--siren", dest="siren", default="105991475", help="SIREN de l'entite (defaut : 105991475)"
+    )
+    analyseur.add_argument(
+        "--exercice", dest="exercice", default="2026", help="exercice (defaut : 2026)"
+    )
+    analyseur.add_argument(
+        "--cloture",
+        dest="cloture",
+        default="20271231",
+        help="date de cloture AAAAMMJJ (defaut : 20271231)",
+    )
+    analyseur.add_argument(
+        "--sep", dest="separateur", default="|", help="separateur de colonnes (defaut : '|')"
+    )
+    analyseur.add_argument(
+        "--dry-run", action="store_true", help="controle et affiche sans ecrire le FEC"
+    )
     analyseur.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     options = analyseur.parse_args(argv)
 
     projet = Path(__file__).resolve().parent.parent
-    racine = Path(options.racine).expanduser().resolve() if options.racine \
+    racine = (
+        Path(options.racine).expanduser().resolve()
+        if options.racine
         else (projet / "exports-fiscaux")
-    dossier_sortie = Path(options.sortie).expanduser().resolve() if options.sortie \
-        else (racine / "fec")
+    )
+    dossier_sortie = (
+        Path(options.sortie).expanduser().resolve() if options.sortie else (racine / "fec")
+    )
 
     if not racine.exists():
         print(f"ERREUR : repertoire introuvable : {racine}", file=sys.stderr)
@@ -254,7 +289,7 @@ def main(argv: list[str] | None = None) -> int:
     chemin_fec = dossier_sortie / f"{options.siren}FEC{options.cloture}.txt"
 
     contenu = options.separateur.join(COLONNES) + "\n"
-    contenu += "".join(options.separateur.join(l) + "\n" for l in lignes)
+    contenu += "".join(options.separateur.join(ligne) + "\n" for ligne in lignes)
     chemin_fec.write_text(contenu, encoding="utf-8")
 
     empreintes = {}

@@ -54,13 +54,11 @@ Codes de sortie
 
 from __future__ import annotations
 
-import argparse
 import datetime as _dt
-import json
 import re
 import sys
 from dataclasses import dataclass, field
-from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -68,10 +66,8 @@ from verifier_equilibre import (  # noqa: E402
     CENT,
     ZERO,
     Ecriture,
-    Journal,
     Ligne,
     fmt,
-    sha256_fichier,
 )
 
 __version__ = "1.0.0"
@@ -332,76 +328,6 @@ def lire_registre(chemin: Path) -> tuple[list[Bien], list[Anomalie]]:
         )
 
     return biens, anomalies
-
-
-# --------------------------------------------------------------------------- #
-# Construction des écritures
-# --------------------------------------------------------------------------- #
-def construire_ecritures(resultat: Resultat) -> list[Ecriture]:
-    """Construit les écritures de reclassement puis de dotation, bien par bien."""
-    ecritures: list[Ecriture] = []
-    date_od = resultat.date_cloture.strftime("%d/%m/%Y")
-    compteur = 0
-
-    for bien in resultat.biens:
-        # a) Reclassement charge -> immobilisation
-        compteur += 1
-        piece = bien.facture or f"OD-{resultat.exercice}-{compteur:03d}"
-        ecritures.append(
-            Ecriture(
-                date=date_od,
-                libelle=f"Reclassement {bien.libelle} — facture {piece}",
-                numero=f"OD-{resultat.exercice}-{compteur:03d}",
-                piece=piece,
-                lignes=[
-                    Ligne(
-                        compte=COMPTE_IMMO_MATERIEL,
-                        libelle=LIBELLE_IMMO_MATERIEL,
-                        debit=bien.ht,
-                        credit=ZERO,
-                        source="amortissements.py",
-                    ),
-                    Ligne(
-                        compte=bien.compte_charge,
-                        libelle=LIBELLE_CHARGE_MATERIEL,
-                        debit=ZERO,
-                        credit=bien.ht,
-                        source="amortissements.py",
-                    ),
-                ],
-            )
-        )
-
-        # b) Dotation aux amortissements
-        dotation = bien.dotation(resultat.date_cloture)
-        if dotation > ZERO:
-            compteur += 1
-            ecritures.append(
-                Ecriture(
-                    date=date_od,
-                    libelle=f"Dotation {resultat.exercice} — {bien.libelle}",
-                    numero=f"OD-{resultat.exercice}-{compteur:03d}",
-                    piece=f"OD-{resultat.exercice}-{compteur:03d}",
-                    lignes=[
-                        Ligne(
-                            compte=COMPTE_DOTATION,
-                            libelle=LIBELLE_DOTATION,
-                            debit=dotation,
-                            credit=ZERO,
-                            source="amortissements.py",
-                        ),
-                        Ligne(
-                            compte=COMPTE_AMORT_MATERIEL,
-                            libelle=LIBELLE_AMORT_MATERIEL,
-                            debit=ZERO,
-                            credit=dotation,
-                            source="amortissements.py",
-                        ),
-                    ],
-                )
-            )
-
-    return ecritures
 
 
 # --------------------------------------------------------------------------- #

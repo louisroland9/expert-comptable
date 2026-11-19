@@ -58,9 +58,7 @@ def balance_depuis_journaux(journaux) -> dict[str, dict[str, Decimal]]:
     for journal in journaux:
         for ecriture in journal.ecritures:
             for ligne in ecriture.lignes:
-                entree = balance.setdefault(
-                    ligne.compte, {"debit": ZERO, "credit": ZERO}
-                )
+                entree = balance.setdefault(ligne.compte, {"debit": ZERO, "credit": ZERO})
                 entree["debit"] += ligne.debit
                 entree["credit"] += ligne.credit
     for entree in balance.values():
@@ -121,8 +119,11 @@ def comparer(notre: dict, ec: dict, tolerance: Decimal) -> list[dict]:
         delta_debit = (n["debit"] - e["debit"]).quantize(CENT)
         delta_credit = (n["credit"] - e["credit"]).quantize(CENT)
 
-        if abs(delta) <= tolerance and abs(delta_debit) <= tolerance \
-                and abs(delta_credit) <= tolerance:
+        if (
+            abs(delta) <= tolerance
+            and abs(delta_debit) <= tolerance
+            and abs(delta_credit) <= tolerance
+        ):
             continue
 
         if compte not in notre:
@@ -132,19 +133,21 @@ def comparer(notre: dict, ec: dict, tolerance: Decimal) -> list[dict]:
         else:
             qualification = "imputation ou montant different"
 
-        ecarts.append({
-            "compte": compte,
-            "notre_debit": str(n["debit"]),
-            "notre_credit": str(n["credit"]),
-            "notre_solde": str(n["solde"]),
-            "ec_debit": str(e["debit"]),
-            "ec_credit": str(e["credit"]),
-            "ec_solde": str(e["solde"]),
-            "delta_solde": str(delta),
-            "delta_debit": str(delta_debit),
-            "delta_credit": str(delta_credit),
-            "qualification": qualification,
-        })
+        ecarts.append(
+            {
+                "compte": compte,
+                "notre_debit": str(n["debit"]),
+                "notre_credit": str(n["credit"]),
+                "notre_solde": str(n["solde"]),
+                "ec_debit": str(e["debit"]),
+                "ec_credit": str(e["credit"]),
+                "ec_solde": str(e["solde"]),
+                "delta_solde": str(delta),
+                "delta_debit": str(delta_debit),
+                "delta_credit": str(delta_credit),
+                "qualification": qualification,
+            }
+        )
     return ecarts
 
 
@@ -154,12 +157,24 @@ def main(argv: list[str] | None = None) -> int:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    analyseur.add_argument("--dir", dest="racine", default=None,
-                           help="repertoire de NOS journaux (defaut : exports-fiscaux/)")
-    analyseur.add_argument("--ec", dest="dossier_ec", default=None,
-                           help="repertoire des livrables EC (defaut : reference-expert-comptable/)")
-    analyseur.add_argument("--tolerance", dest="tolerance", default="0.00",
-                           help="tolerance en euros sur les ecarts (defaut : 0)")
+    analyseur.add_argument(
+        "--dir",
+        dest="racine",
+        default=None,
+        help="repertoire de NOS journaux (defaut : exports-fiscaux/)",
+    )
+    analyseur.add_argument(
+        "--ec",
+        dest="dossier_ec",
+        default=None,
+        help="repertoire des livrables EC (defaut : reference-expert-comptable/)",
+    )
+    analyseur.add_argument(
+        "--tolerance",
+        dest="tolerance",
+        default="0.00",
+        help="tolerance en euros sur les ecarts (defaut : 0)",
+    )
     analyseur.add_argument("--json", action="store_true", help="sortie JSON")
     analyseur.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     options = analyseur.parse_args(argv)
@@ -167,10 +182,16 @@ def main(argv: list[str] | None = None) -> int:
     tolerance = parse_montant(options.tolerance)
 
     projet = Path(__file__).resolve().parent.parent
-    racine = Path(options.racine).expanduser().resolve() if options.racine \
+    racine = (
+        Path(options.racine).expanduser().resolve()
+        if options.racine
         else (projet / "exports-fiscaux")
-    dossier_ec = Path(options.dossier_ec).expanduser().resolve() if options.dossier_ec \
+    )
+    dossier_ec = (
+        Path(options.dossier_ec).expanduser().resolve()
+        if options.dossier_ec
         else (projet / "reference-expert-comptable")
+    )
 
     if not racine.exists():
         print(f"ERREUR : repertoire introuvable : {racine}", file=sys.stderr)
@@ -196,7 +217,8 @@ def main(argv: list[str] | None = None) -> int:
     fichiers_ec = []
     if dossier_ec.exists():
         fichiers_ec = sorted(
-            p for p in dossier_ec.rglob("*")
+            p
+            for p in dossier_ec.rglob("*")
             if p.is_file() and p.suffix.lower() in {".csv", ".json"}
         )
 
