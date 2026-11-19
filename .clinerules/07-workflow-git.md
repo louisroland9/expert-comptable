@@ -38,6 +38,56 @@ scripts/creer_branche.sh feat calcul-tva
 
 Le script refuse un arbre sale, normalise le slug, part de `main` et **ne pousse pas**.
 
+### R2.1 — La branche est TOUJOURS obligatoire
+
+**Aucune exception.** Même pour une virgule, une faute de frappe, un titre dans un
+README : toute tâche passe par une branche dédiée.
+
+```
+1 tâche  =  1 branche  =  N commits atomiques
+```
+
+Il est **interdit** de committer directement sur `main`, quelle que soit la taille
+du changement. Un changement d'un seul caractère passe par `chore/…`.
+
+| Cas | Branche à créer |
+|---|---|
+| Ajouter une capacité (script, calcul) | `feat/<slug>` |
+| Corriger un calcul, un mapping, un bug | `fix/<slug>` |
+| Outillage, dépendances, doc, typo, virgule | `chore/<slug>` |
+
+> **Corollaire** : si aucun slug raisonnable ne vient, c'est le signe que la tâche
+> n'est pas un changement logique unique. La re-découper.
+
+### R2.2 — Branche précédente non mergée : prévenir et demander
+
+L'agent **ne décide pas seul** du point de départ d'une nouvelle tâche. Avant de
+créer une branche, il **inspecte l'état** :
+
+```bash
+git for-each-ref --format='%(refname:short) %(contents:subject)' refs/heads
+git log --oneline main..<branche-en-attente>
+```
+
+S'il existe **au moins une branche locale non mergée dans `main`**, l'agent
+**s'arrête et demande explicitement** à l'utilisateur :
+
+> « La branche `<branche>` n'est pas mergée dans `main` (N commits en attente).
+> Je pars de `main`, ou j'empile sur `<branche>` ? »
+
+Il **attend la réponse** avant tout `checkout`, `switch` ou `commit`.
+
+| Situation | Comportement attendu |
+|---|---|
+| Aucune branche en attente | Créer la branche depuis `main` et poursuivre |
+| Branche(s) en attente | **Stopper, prévenir, demander**, puis attendre |
+| L'utilisateur dit « pars de `main` » | Créer depuis `main`, signaler le risque de conflit |
+| L'utilisateur dit « empile » | Créer depuis la branche indiquée, noter la dépendance |
+
+> ⚠️ **Règle de restitution** : le point de départ retenu est **explicité** dans le
+> compte rendu de fin de tâche (« branche créée depuis `main` » / « empilée sur
+> `<branche>` »).
+
 ## R3 — Format de commit
 
 ```
@@ -69,13 +119,14 @@ Le script refuse un arbre sale, normalise le slug, part de `main` et **ne pousse
 main ──► chore/outillage-git ──► (commits atomiques) ──► validation ──► UTILISATEUR merges
 ```
 
-1. `scripts/creer_branche.sh <prefixe> <slug>`
-2. Commits atomiques, un par changement logique
-3. Contrôles avant de rendre la main :
+1. Vérifier les branches non mergées (cf. **R2.2**) et **demander** si besoin
+2. `scripts/creer_branche.sh <prefixe> <slug>`
+3. Commits atomiques, un par changement logique
+4. Contrôles avant de rendre la main :
    `uv run pre-commit run --all-files`
-4. **Rendre la main** : indiquer la branche, les commits, les tests exécutés.
-   **Ne pas pousser, ne pas merger.**
-5. L'utilisateur merge (squash) puis supprime la branche.
+5. **Rendre la main** : indiquer la branche, son **point de départ**, les commits, les
+   tests exécutés. **Ne pas pousser, ne pas merger.**
+6. L'utilisateur merge (squash) puis supprime la branche.
 
 ## R6 — Cohérence avec les autres règles
 
