@@ -45,9 +45,14 @@
 #
 # RÈGLES DE BRANCHE :
 #   - UNE feature = UNE branche, créée depuis `main` à jour.
-#   - Préfixes : feat/<slug>, fix/<slug>, chore/<slug>.
+#   - Préfixes : feat/<slug>, fix/<slug>, chore/<slug>, docs/<slug>.
 #   - INTERDIT de committer directement sur `main`.
 #   - L'agent ne pousse JAMAIS : le push est fait par l'utilisateur.
+#
+# DOCUMENTATION (règle 08) :
+#   - Si le commit touche l'arborescence, un script ou un entry point,
+#     README.md doit être mis à jour DANS LE MÊME COMMIT.
+#   - Le hook `readme-a-jour` le rappelle (avertisseur non bloquant).
 #
 # EXEMPLES VALIDES :
 #   feat(tva): ajoute le calcul de la TVA déductible intracommunautaire

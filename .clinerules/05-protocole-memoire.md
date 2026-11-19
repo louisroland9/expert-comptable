@@ -37,6 +37,7 @@ Mettre à jour la mémoire **immédiatement** après :
 | Achat > 500 € HT | `immobilisations-et-charges.md` |
 | Jalon e-invoicing | `e-invoicing.md` |
 | Changement de paramètre juridique/fiscal | `identite-sasu.md` |
+| Ajout/renommage d'un script, d'un dossier ou d'un entry point | `README.md` (cf. `.clinerules/08`) |
 
 ## R3 — Format des entrées
 
@@ -63,6 +64,7 @@ Avant de terminer une session, vérifier :
 - [ ] Les questions ouvertes sont remontées dans `cabinet-doublon.md`
 - [ ] Aucun fichier de `qonto-exports/` ou `reference-expert-comptable/` n'a été modifié
 - [ ] Les scripts exécutés ont produit un `.meta.json` dans `exports-fiscaux/`
+- [ ] Si l'arborescence ou les scripts ont changé : `README.md` est à jour (règle 08)
 
 ## R6 — Journal des décisions
 
