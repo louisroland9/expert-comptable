@@ -8,7 +8,7 @@ Le dépôt applique **Conventional Commits**, des **commits atomiques**, et une
 | Interdit | Règle |
 |---|---|
 | 🔴 `git push` par l'agent | **L'utilisateur pousse lui-même.** Aucune exception. |
-| 🔴 Committer sur `main` | Toujours créer `feat/…`, `fix/…` ou `chore/…` d'abord. |
+| 🔴 Committer sur `main` | Toujours créer `feat/…`, `fix/…`, `chore/…` ou `docs/…` d'abord. |
 | 🔴 Versionner une donnée financière | `qonto-exports/`, `reference-expert-comptable/`, `exports-fiscaux/`, `*.pdf`, `*.meta.json` |
 | 🔴 Historique réécrit sur une branche partagée | `push --force` interdit sauf demande explicite. |
 | 🔴 Commits fourre-tout | Un commit = un changement logique. |
@@ -35,6 +35,7 @@ scripts/creer_branche.sh feat calcul-tva
 | `feat/<slug>` | Nouvelle capacité du harnais (script, calcul, mapping) |
 | `fix/<slug>` | Correction d'un calcul, d'un mapping, d'un bug |
 | `chore/<slug>` | Outillage, dépendances, tâches internes |
+| `docs/<slug>` | Documentation seule (README, `.clinerules/`, `memory-bank/`) |
 
 Le script refuse un arbre sale, normalise le slug, part de `main` et **ne pousse pas**.
 
@@ -54,7 +55,8 @@ du changement. Un changement d'un seul caractère passe par `chore/…`.
 |---|---|
 | Ajouter une capacité (script, calcul) | `feat/<slug>` |
 | Corriger un calcul, un mapping, un bug | `fix/<slug>` |
-| Outillage, dépendances, doc, typo, virgule | `chore/<slug>` |
+| Outillage, dépendances, typo, virgule | `chore/<slug>` |
+| Documentation seule (README, règles, mémoire) | `docs/<slug>` |
 
 > **Corollaire** : si aucun slug raisonnable ne vient, c'est le signe que la tâche
 > n'est pas un changement logique unique. La re-découper.
@@ -143,7 +145,7 @@ main ──► chore/outillage-git ──► (commits atomiques) ──► valid
 |---|---|
 | `git status`, `git diff`, `git log`, `git show` | `git push` (toutes formes) |
 | `git switch -c`, `git add -p` | `git commit` sur `main` |
-| `git commit` sur branche `feat\|fix\|chore` | `git reset --hard` sans validation |
+| `git commit` sur branche `feat\|fix\|chore\|docs` | `git reset --hard` sans validation |
 | `git restore --staged <fichier>` | `git rebase` sur une branche poussée |
 | `uv run pre-commit run --all-files` | Modification d'un fichier de `qonto-exports/` ou `reference-expert-comptable/` |
 

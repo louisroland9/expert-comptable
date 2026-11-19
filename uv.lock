@@ -233,7 +233,7 @@ wheels = [
 [[package]]
 name = "expert-comptable-sasu"
 version = "1.0.0"
-source = { virtual = "." }
+source = { editable = "." }
 
 [package.optional-dependencies]
 analyse = [

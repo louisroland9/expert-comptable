@@ -48,6 +48,16 @@ chore(outillage): ...
 - [ ] Une décision structurante suit le format `D-{NN}` (règle R6/05)
 - [ ] Aucun montant inventé ; un montant estimé porte la mention `⚠️ ESTIMÉ — À CONFIRMER`
 
+## Documentation (règle 08)
+
+- [ ] Le changement ne touche ni `scripts/`, ni `.clinerules/`, ni `memory-bank/`,
+      ni `pyproject.toml` → `README.md` inchangé (légitime)
+- [ ] **OU** les sources ont changé **et** `README.md` est mis à jour dans le **même
+      commit** (§ 2 Arborescence, § 4 Scripts, § 3 Installation)
+- [ ] Le README ne documente **aucun** script ni entry point supprimé/renommé
+- [ ] L'avertissement `readme-a-jour` est soit **résolu**, soit **explicitement ignoré**
+      et justifié ci-dessous
+
 ## Alertes déclenchées par ce changement
 
 - [ ] Aucune

@@ -157,6 +157,46 @@ Pour chaque période :
   d'achat et le n° de facture**. Tant que ces données ne sont pas extraites de Qonto, le
   registre reste vide et **aucune écriture n'est produite** (option B retenue).
 - **À revoir** : oui — écart probable avec l'EC (E3).
+### D-10 — Documentation : préfixe `docs` et garde-fou README (B3)
+- **Date** : 2026-11-19
+- **Décision** :
+  1. le préfixe de branche **`docs`** est ajouté aux préfixes autorisés par
+     `scripts/creer_branche.sh` (`feat` · `fix` · `chore` · `docs`) pour les tâches
+     purement documentaires ;
+  2. la **mise à jour du `README.md` devient obligatoire dans le même commit** que tout
+     changement d'arborescence / de scripts / d'entry points — règle **`.clinerules/08`** ;
+  3. application outillée **B3** : hook pre-commit `readme-a-jour` **avertisseur
+     non bloquant** (contournable par `SKIP=readme-a-jour`) ;
+  4. le projet est **packagé** (`[build-system]` hatchling + `[tool.uv] package = true`)
+     afin que les entry points `[project.scripts]` **fonctionnent réellement** — ils
+     étaient déclarés depuis l'origine mais **ignorés par uv** (`uv run equilibre`
+     échouait avant correction). Aucune dépendance runtime n'est ajoutée.
+- **Justification** : le README était réduit à deux lignes ; un harnais documenté doit
+  décrire son interface, et la doc doit rester **atomique** avec le changement de source
+  (règle R4/07). Le projet a déjà une culture de garde-fous pre-commit `repo: local`, en
+  stdlib pure — l'avertisseur s'y insère sans friction ni téléchargement réseau.
+- **Alternative écartée** :
+  - garde-fou **bloquant** (B2) : trop rigide, génère des échecs sur des commits légitimes
+    qui touchent `memory-bank/` sans changer le README ;
+  - simple règle documentaire (B1) seule : insuffisante, aucun rappel automatique.
+- **⚠️ Défaut constaté (lecture seule, non corrigé ici)** :
+  `scripts/amortissements.py` est un **module bibliothèque** — il **n'expose pas de
+  fonction `main`** et **ne possède aucune CLI**, alors que sa **docstring décrit** une
+  interface (`--registre`, `--sortie`, `--exercice`, `--json`, codes de sortie
+  `0/1/2/3`) et un livrable `journal_OD_amortissements_<exercice>.csv` qui **n'existent
+  pas**. En conséquence :
+  - **aucun entry point `amortissements`** n'est déclaré dans `pyproject.toml`
+    (la tentative `uv run amortissements` échouait sur `ImportError: cannot import name
+    'main'`) ;
+  - le **registre** d'immobilisations (`immobilisations-et-charges.md` §3) reste vide et
+    **aucune écriture OD n'est produite** — cohérent avec l'option B retenue le
+    2026-11-18 ;
+  - l'écart entre la docstring et le code est **documenté** (README §4.4) mais **non
+    corrigé** : décision à prendre (écrire la CLI, ou corriger la docstring).
+- **À revoir** : décision à prendre sur `amortissements.py` (CLI vs docstring).
+
+
+
 
 ## 7. Table des écarts (à remplir)
 
@@ -169,3 +209,4 @@ Pour chaque période :
 | Date | Modification | Source |
 |---|---|---|
 | 2026-11-17 | Création — 7 questions ouvertes, 4 décisions initiales | Réponses utilisateur + Kbis |
+| 2026-11-19 | **D-10** — documentation : préfixe `docs`, garde-fou README (B3), packaging des entry points ; défaut `amortissements.py` consigné | Validé par l'utilisateur |

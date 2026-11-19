@@ -6,15 +6,16 @@
 #   scripts/creer_branche.sh feat calcul-tva
 #   scripts/creer_branche.sh fix equilibre-od
 #   scripts/creer_branche.sh chore outillage-git
+#   scripts/creer_branche.sh docs readme-racine
 #
 # Règle : UNE feature = UNE branche, créée depuis `main` à jour.
-# Convention : feat/<slug> · fix/<slug> · chore/<slug>
+# Convention : feat/<slug> · fix/<slug> · chore/<slug> · docs/<slug>
 # Le script NE pousse JAMAIS : le push est fait par l'utilisateur.
 # =====================================================================
 
 set -euo pipefail
 
-PREFIXES_AUTORISES=("feat" "fix" "chore")
+PREFIXES_AUTORISES=("feat" "fix" "chore" "docs")
 BRANCHE_PRINCIPALE="main"
 
 rouge()  { printf '\033[31m%s\033[0m\n' "$*" >&2; }
@@ -22,7 +23,7 @@ jaune()  { printf '\033[33m%s\033[0m\n' "$*" >&2; }
 vert()   { printf '\033[32m%s\033[0m\n' "$*"; }
 
 if [ "$#" -ne 2 ]; then
-  rouge "Usage : scripts/creer_branche.sh <feat|fix|chore> <slug>"
+  rouge "Usage : scripts/creer_branche.sh <feat|fix|chore|docs> <slug>"
   rouge "Exemple : scripts/creer_branche.sh feat calcul-tva"
   exit 3
 fi

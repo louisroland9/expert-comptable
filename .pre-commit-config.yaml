@@ -133,3 +133,34 @@ repos:
         language: system
         types: [json]
         exclude: ^qonto-exports/
+
+  # ------------------------------------------------------------------
+  # 5. Documentation — rappel de mise à jour du README (B3).
+  #    Avertisseur NON bloquant : si le commit touche des sources qui
+  #    décrivent l'arborescence du harnais (scripts, pyproject, règles,
+  #    mémoire) SANS toucher README.md, on prévient sans échouer.
+  #    Contournement volontaire : `SKIP=readme-a-jour git commit …`
+  #    Cf. .clinerules/08-documentation.md.
+  # ------------------------------------------------------------------
+  - repo: local
+    hooks:
+      - id: readme-a-jour
+        name: "Documentation — rappel de mise à jour du README"
+        entry: >-
+          bash -c '
+          fichiers="$(git diff --cached --name-only --diff-filter=ACMR)";
+          sources="$(printf "%s\n" "$fichiers"
+          | grep -E "^(scripts/|\.clinerules/|memory-bank/)[^/]+$|^pyproject\.toml$" || true)";
+          readme="$(printf "%s\n" "$fichiers" | grep -E "^README\.md$" || true)";
+          if [ -n "$sources" ] && [ -z "$readme" ]; then
+          echo "⚠️  README.md non touché alors que des sources ont changé :";
+          printf "   %s\n" $sources;
+          echo "   Vérifie les sections « Arborescence » et « Scripts » du README";
+          echo "   (.clinerules/08-documentation.md).";
+          echo "   Contournement : SKIP=readme-a-jour git commit ...";
+          fi;
+          exit 0
+          '
+        language: system
+        pass_filenames: false
+        always_run: true
