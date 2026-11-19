@@ -61,10 +61,11 @@ import io
 import json
 import re
 import sys
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 __version__ = "1.0.0"
 
@@ -163,11 +164,11 @@ class Ecriture:
 
     @property
     def total_debit(self) -> Decimal:
-        return sum((l.debit for l in self.lignes), ZERO)
+        return sum((ligne.debit for ligne in self.lignes), ZERO)
 
     @property
     def total_credit(self) -> Decimal:
-        return sum((l.credit for l in self.lignes), ZERO)
+        return sum((ligne.credit for ligne in self.lignes), ZERO)
 
     @property
     def ecart(self) -> Decimal:
@@ -534,7 +535,9 @@ def afficher_rapport(rapport: dict) -> None:
     print(f" Lignes          : {rapport['nb_lignes']}")
     print("-" * 78)
     if rapport["journaux"]:
-        entete = f" {'Code':<6} {'Ecr.':>5} {'Total debit':>16} {'Total credit':>16} {'Ecart':>12}  Etat"
+        entete = (
+            f" {'Code':<6} {'Ecr.':>5} {'Total debit':>16} {'Total credit':>16} {'Ecart':>12}  Etat"
+        )
         print(entete)
         for j in rapport["journaux"]:
             etat = "OK" if j["equilibre"] else "DESEQUILIBRE"
@@ -592,12 +595,18 @@ def main(argv: list[str] | None = None) -> int:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    analyseur.add_argument("--dir", dest="racine", default=None,
-                           help="repertoire contenant les journaux (defaut : exports-fiscaux/)")
-    analyseur.add_argument("--json", action="store_true",
-                           help="sortie JSON (machine) au lieu du rapport lisible")
-    analyseur.add_argument("--meta", action="store_true",
-                           help="ecrit un fichier .meta.json de tracabilite")
+    analyseur.add_argument(
+        "--dir",
+        dest="racine",
+        default=None,
+        help="repertoire contenant les journaux (defaut : exports-fiscaux/)",
+    )
+    analyseur.add_argument(
+        "--json", action="store_true", help="sortie JSON (machine) au lieu du rapport lisible"
+    )
+    analyseur.add_argument(
+        "--meta", action="store_true", help="ecrit un fichier .meta.json de tracabilite"
+    )
     analyseur.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     options = analyseur.parse_args(argv)
 
