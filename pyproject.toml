@@ -29,7 +29,7 @@ package = true
 [project.optional-dependencies]
 analyse = ["pandas>=2.2", "openpyxl>=3.1"]
 
-# Outillage workflow git (uv sync) — cf. .clinerules/07-workflow-git.md
+# Outillage workflow git (uv sync) — cf. docs/procedures/07-workflow-git.md
 [dependency-groups]
 dev = [
   "pre-commit>=3.7",
@@ -61,7 +61,7 @@ pythonpath = ["."]
 # ---------------------------------------------------------------------
 # Conventional Commits — validation des messages (pre-commit `commit-msg`)
 # Scope volontairement libre : la liste usuelle est documentée dans
-# .clinerules/07-workflow-git.md et .gitmessage, sans blocage.
+# docs/procedures/07-workflow-git.md et .gitmessage, sans blocage.
 # ---------------------------------------------------------------------
 [tool.commitizen]
 name = "cz_conventional_commits"

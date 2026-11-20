@@ -65,7 +65,7 @@
 
 > ⚠️ **Impact TVA majeur** : l'activité de **formation / enseignement** peut relever de
 > l'**exonération art. 261-4-4° CGI**. Vérifier avec l'EC quelles factures sont
-> exonérées et lesquelles supportent la TVA à 20 %. Cf. `.clinerules/04`.
+> exonérées et lesquelles supportent la TVA à 20 %. Cf. `docs/procedures/04-cycle-fiscal-sasu.md`.
 
 ## Direction
 

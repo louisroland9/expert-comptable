@@ -12,7 +12,7 @@
 - [ ] `feat` — nouvelle capacité du harnais
 - [ ] `fix` — correction d'un calcul, d'un mapping, d'un bug
 - [ ] `chore` — outillage, dépendances
-- [ ] `docs` — documentation (README, `.clinerules/`, `memory-bank/`)
+- [ ] `docs` — documentation (README, `.clinerules/`, `docs/procedures/`, `memory-bank/`)
 - [ ] `refactor` — sans changement de comportement
 - [ ] `test` — tests
 - [ ] `build` / `ci` — outillage, hooks
@@ -50,7 +50,7 @@ chore(outillage): ...
 
 ## Documentation (règle 08)
 
-- [ ] Le changement ne touche ni `scripts/`, ni `.clinerules/`, ni `memory-bank/`,
+- [ ] Le changement ne touche ni `scripts/`, ni `.clinerules/`, ni `docs/procedures/`, ni `memory-bank/`,
       ni `pyproject.toml` → `README.md` inchangé (légitime)
 - [ ] **OU** les sources ont changé **et** `README.md` est mis à jour dans le **même
       commit** (§ 2 Arborescence, § 4 Scripts, § 3 Installation)

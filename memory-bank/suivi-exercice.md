@@ -1,7 +1,7 @@
 # Suivi de l'exercice — LR Data
 
 > Tableau de bord de l'avancement. **À mettre à jour après chaque extraction Qonto ou
-> clôture mensuelle** (cf. `.clinerules/05-protocole-memoire.md`).
+> clôture mensuelle** (cf. `docs/procedures/05-protocole-memoire.md`).
 
 ## Paramètres de l'exercice
 
@@ -18,7 +18,7 @@
 |---|---|---|---|---|---|
 | `transactions_2026-06.json` | transactions | 2026-11-19 | 5 | `019eda7f-ae7e-76c7-8f93-43a826e46f38` | ✅ extrait |
 
-> Nommage : `qonto-exports/{type}_{AAAA-MM}.json` (cf. `.clinerules/02`).
+> Nommage : `qonto-exports/{type}_{AAAA-MM}.json` (cf. `docs/procedures/02-workflow-mcp-qonto.md`).
 > Un snapshot existant n'est **jamais écrasé**.
 
 **Organisation** : LR Data (`019e875e-6fed-76e0-a3ff-1ffbf8076678`)

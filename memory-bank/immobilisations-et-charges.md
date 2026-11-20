@@ -81,7 +81,7 @@ Libellé : Dotation aux amortissements {libellé} — {année}
 Avec : `annuité = HT / durée_années × (jours_détenus / 365)`
 
 > ⚠️ **Ces écritures nécessitent une validation explicite** de l'utilisateur
-> (cf. `.clinerules/01` — interdiction de reclasser sans validation).
+> (cf. `docs/procedures/01-persona-sasu.md` — interdiction de reclasser sans validation).
 
 ## 6. Impact sur le résultat (exercice 2026)
 
@@ -91,7 +91,7 @@ Avec : `annuité = HT / durée_années × (jours_détenus / 365)`
 | Reclassement (immobilisation) | 0 | {HT × prorata} | plus élevé |
 
 > L'écart de résultat **modifie l'IS** : à chiffrer précisément avec Python
-> (jamais de tête — cf. `.clinerules/03`).
+> (jamais de tête — cf. `docs/procedures/03-regles-calculs-python.md`).
 
 ## 7. Procédure
 
